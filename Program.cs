@@ -1,16 +1,19 @@
-﻿using Portifolio.Classes;
-using Portifolio.Enums;
+﻿using Microsoft.Extensions.DependencyInjection;
+using Portifolio.Classes;
+using Portifolio.Interfaces;
+using Portifolio.Services;
 using System.Globalization;
 
 CultureInfo idioma = new("en-US");
-const double LIMIT_VALUE = 1000000D;
-const int LIMIT_EXPIRATION = 30;
-const string PRIVATE_SECTOR = "Private";
-const string PUPLIC_SECTOR= "Public";
-const string NOT_CATEGORIZED = "Not categorized";
 
 try
 {
+    IServiceCollection services = new ServiceCollection();
+    ConfigureServices(services);
+    var serviceProvider = services.BuildServiceProvider();
+
+    var tradeServ = serviceProvider.GetService<ITradeServ>();
+
     DateTime dateReference;
     int numTrades;
 
@@ -25,7 +28,7 @@ try
     numTrades = Convert.ToInt32(Console.ReadLine());
 
     string elements;
-    List<Trade> lst = new();
+    List<string> lst = new();
 
     Console.WriteLine("Input Trade (Ex: 1000000 Public 09/15/2022 true) separated by a space: ");
 
@@ -33,17 +36,15 @@ try
     {
         elements = Console.ReadLine();
 
-        string[] arrElements = elements.Split(' ');
-
         Trade objTrade = new()
         {
-            Value = Convert.ToDouble(arrElements[0], idioma),
-            ClientSector = arrElements[1],
-            NextPaymentDate = Convert.ToDateTime(arrElements[2], idioma),
-            IsPoliticallyExposed = Convert.ToBoolean(arrElements[3])
+            Value = Convert.ToDouble(elements.Split(' ')[0], idioma),
+            ClientSector = elements.Split(' ')[1],
+            NextPaymentDate = Convert.ToDateTime(elements.Split(' ')[2], idioma),
+            IsPoliticallyExposed = Convert.ToBoolean(elements.Split(' ')[3])
         };
 
-        lst.Add(objTrade);
+        lst.Add(tradeServ.CreateTrade(objTrade, dateReference));
     }
 
     Console.WriteLine(string.Empty);
@@ -51,28 +52,35 @@ try
 
     foreach (var item in lst)
     {
-        TimeSpan interval = item.NextPaymentDate - dateReference;
+        Console.WriteLine(item);
+        //TimeSpan interval = item.NextPaymentDate - dateReference;
 
-        if(item.IsPoliticallyExposed)
-            Console.WriteLine(EnumCategory.PEP);
+        //if(item.IsPoliticallyExposed)
+        //    Console.WriteLine(EnumCategory.PEP);
 
-        else if (interval.Days > LIMIT_EXPIRATION)
-            Console.WriteLine(EnumCategory.EXPIRED);
+        //else if (interval.Days > LIMIT_EXPIRATION)
+        //    Console.WriteLine(EnumCategory.EXPIRED);
 
-        else if (item.Value > Convert.ToDouble(LIMIT_VALUE, idioma) && item.ClientSector == PRIVATE_SECTOR)
-            Console.WriteLine(EnumCategory.HIGHRISK);
+        //else if (item.Value > Convert.ToDouble(LIMIT_VALUE, idioma) && item.ClientSector == PRIVATE_SECTOR)
+        //    Console.WriteLine(EnumCategory.HIGHRISK);
 
-        else if (item.Value > Convert.ToDouble(LIMIT_VALUE, idioma) && item.ClientSector == PUPLIC_SECTOR)
-            Console.WriteLine(EnumCategory.MEDIUMRISK);
-        else
-            Console.WriteLine(NOT_CATEGORIZED);
+        //else if (item.Value > Convert.ToDouble(LIMIT_VALUE, idioma) && item.ClientSector == PUPLIC_SECTOR)
+        //    Console.WriteLine(EnumCategory.MEDIUMRISK);
+        //else
+        //    Console.WriteLine(NOT_CATEGORIZED);
     }
 
     Console.Write("END");
+    Console.ReadKey();
 }
 catch (Exception ex)
 {
     Console.WriteLine($"Error: {ex.Message}");
 }
 
-Console.ReadKey();
+static void ConfigureServices(IServiceCollection services)
+{
+    services.AddScoped<ICategoryServ, CategoryService>();
+    services.AddScoped<ITradeServ, TradeService>();
+    services.AddScoped<ITradeCategoryServ, TradeCategoryService>();
+}

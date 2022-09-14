@@ -28,3 +28,6 @@ C:\Users\Barcelo.Braga\Downloads\Portifolio\obj\Debug\net6.0\refint\Portifolio.d
 C:\Users\Barcelo.Braga\Downloads\Portifolio\obj\Debug\net6.0\Portifolio.pdb
 C:\Users\Barcelo.Braga\Downloads\Portifolio\obj\Debug\net6.0\Portifolio.genruntimeconfig.cache
 C:\Users\Barcelo.Braga\Downloads\Portifolio\obj\Debug\net6.0\ref\Portifolio.dll
+C:\Dev\Portifolio\bin\Debug\net6.0\Microsoft.Extensions.DependencyInjection.dll
+C:\Dev\Portifolio\bin\Debug\net6.0\Microsoft.Extensions.DependencyInjection.Abstractions.dll
+C:\Dev\Portifolio\obj\Debug\net6.0\Portifolio.csproj.CopyComplete
