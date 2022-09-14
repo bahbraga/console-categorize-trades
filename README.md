@@ -1,5 +1,4 @@
 #  Categorize trades in a bank´s portfolio
-# Using Visual Studio 2022 .NET CORE 6.0
 
 Currently, there are three categories (in order of precedence):
 1. EXPIRED: Trades whose next payment date is late by more than 30 days based on a reference date which will 
@@ -12,5 +11,14 @@ IsPoliticallyExposed was created in the ITrade interface. A trade shall be categ
 IsPoliticallyExposed is true. Describe in at most 1 paragraph what you must do in your design to account for this 
 new category
 
-R: 
+<p>Answer: Add a property called IsPoliticallyExposed in the ITrade interface, 
+a Trade class property, and a PEP category in the enum of categories 
+in their respective order. This category will 
+be the first to be validated, and if true it cannot be classified.</p>
+
+# Using Visual Studio 2022 .NET CORE 6.0
+
+<h2>Written a C# console application using object oriented design (OOD).<h2>
+
+
 
